@@ -12,13 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            // UUID primary key
+            $table->uuid('id')->primary();
+
+            // Role enum
+            $table->enum('role', ['admin', 'dosen', 'pembina', 'mahasiswa']);
+
+            // Credentials
+            $table->string('email', 191)->unique();
+            $table->string('password', 255);
             $table->rememberToken();
-            $table->timestamps();
+
+            // Relations among roles and company link
+            $table->uuid('dosen_user_id')->nullable(); // -> users.id (role=dosen)
+            $table->uuid('pembina_user_id')->nullable(); // -> users.id (role=pembina)
+            $table->uuid('company_id')->nullable(); // -> companies.id (FK added after companies table is created)
+
+            // Timestamps with timezone
+            $table->timestampsTz();
         });
     }
 
@@ -30,3 +41,4 @@ return new class extends Migration
         Schema::dropIfExists('users');
     }
 };
+
