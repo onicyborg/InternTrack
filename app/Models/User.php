@@ -27,10 +27,11 @@ class User extends Authenticatable
         'role',
         'email',
         'password',
+        'is_active',
         'remember_token',
         'dosen_user_id',
         'pembina_user_id',
-        'company_id',
+        'campus_id',
     ];
 
     /**
@@ -58,9 +59,9 @@ class User extends Authenticatable
         return $this->hasOne(Profiles::class, 'user_id');
     }
 
-    public function company()
+    public function campus()
     {
-        return $this->belongsTo(Companies::class, 'company_id');
+        return $this->belongsTo(Campuses::class, 'campus_id');
     }
 
     // Self-referential relations (for mahasiswa linking to dosen/pembina)

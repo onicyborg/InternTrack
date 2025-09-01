@@ -21,7 +21,6 @@ class Profiles extends Model
         'photo_url',
         'phone',
         'whatsapp',
-        'is_active',
         'nik',
         'nim',
         'program_studi',
