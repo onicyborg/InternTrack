@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('admin_company.index');
 });
 
 Route::prefix('admin')->middleware('role:admin')->group(function () {
