@@ -105,10 +105,13 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="{{ route('logout') }}">
-                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
-                        <span class="menu-title">Logout</span>
-                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a class="menu-link" href="#" onclick="event.preventDefault(); this.closest('form').submit();">
+                            <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                            <span class="menu-title">Logout</span>
+                        </a>
+                    </form>
                 </div>
                 <!--end:Menu item-->
             </div>
