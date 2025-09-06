@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampusController;
+use App\Http\Controllers\LecturerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,4 +51,11 @@ Route::prefix('company-admin')->middleware(['auth','role:company_admin'])->group
     Route::post('/campuses', [CampusController::class, 'store'])->name('company_admin.campuses.store');
     Route::put('/campuses/{id}', [CampusController::class, 'update'])->name('company_admin.campuses.update');
     Route::delete('/campuses/{id}', [CampusController::class, 'destroy'])->name('company_admin.campuses.destroy');
+
+    // Lecturers Management
+    Route::get('/lecturers', [LecturerController::class, 'index'])->name('company_admin.lecturers.index');
+    Route::get('/lecturers/{id}', [LecturerController::class, 'show'])->name('company_admin.lecturers.show');
+    Route::post('/lecturers', [LecturerController::class, 'store'])->name('company_admin.lecturers.store');
+    Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('company_admin.lecturers.update');
+    Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('company_admin.lecturers.destroy');
 });
