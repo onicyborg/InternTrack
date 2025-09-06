@@ -23,7 +23,7 @@
                         </div>
                         <div class="mt-3 text-gray-500 small">
                             Active: <span class="fw-semibold text-success">{{ $mahasiswaActive ?? 0 }}</span> ·
-                            Tidak Aktif: <span class="fw-semibold text-danger">{{ $mahasiswaInactive ?? 0 }}</span>
+                            Non-Active: <span class="fw-semibold text-danger">{{ $mahasiswaInactive ?? 0 }}</span>
                         </div>
                     </div>
                     <div class="p-4 rounded-3 bg-light-primary">
@@ -50,7 +50,7 @@
                         </div>
                         <div class="mt-3 text-gray-500 small">
                             Active: <span class="fw-semibold text-success">{{ $dosenActive ?? 0 }}</span> ·
-                            Tidak Aktif: <span class="fw-semibold text-danger">{{ $dosenInactive ?? 0 }}</span>
+                            Non-Active: <span class="fw-semibold text-danger">{{ $dosenInactive ?? 0 }}</span>
                         </div>
                     </div>
                     <div class="p-4 rounded-3 bg-light-info">
@@ -76,7 +76,7 @@
                         </div>
                         <div class="mt-3 text-gray-500 small">
                             Active: <span class="fw-semibold text-success">{{ $pembinaActive ?? 0 }}</span> ·
-                            Tidak Aktif: <span class="fw-semibold text-danger">{{ $pembinaInactive ?? 0 }}</span>
+                            Non-Active: <span class="fw-semibold text-danger">{{ $pembinaInactive ?? 0 }}</span>
                         </div>
                     </div>
                     <div class="p-4 rounded-3 bg-light-warning">

@@ -15,11 +15,22 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title">Daftar Pembina</h3>
-            <button id="btnAddMentor" class="btn btn-primary">
-                <i class="ki-duotone ki-plus fs-2"></i> Tambah Pembina
-            </button>
+        <div class="card-header flex-wrap d-flex align-items-center gap-2">
+            <h3 class="card-title mb-0 me-4">Daftar Pembina</h3>
+            <div class="d-flex align-items-center gap-2 flex-wrap my-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" id="mentorsSearch" class="form-control form-control-sm" placeholder="Cari kata kunci...">
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                <button id="btnExportMentorsXlsx" class="btn btn-light-success btn-sm">
+                    <i class="bi bi-file-earmark-excel"></i> Export Excel
+                </button>
+                <button id="btnAddMentor" class="btn btn-primary btn-sm">
+                    <i class="ki-duotone ki-plus fs-2"></i> Tambah Pembina
+                </button>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -155,6 +166,8 @@
 
 @section('extra_js')
 <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+<!-- SheetJS for Excel export -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
     const CSRF_TOKEN = '{{ csrf_token() }}';
     const routes = {
@@ -187,6 +200,38 @@
         ordering: true,
         searching: true
     });
+
+    // Keyword search
+    document.getElementById('mentorsSearch').addEventListener('input', function(){
+        table.search(this.value).draw();
+    });
+
+    // Export XLSX (current filtered rows)
+    function exportMentorsXlsx() {
+        const rows = table.rows({ search: 'applied' }).nodes();
+        const headers = ['Nama','Email','Phone','WhatsApp','Status'];
+        const data = [headers];
+        $(rows).each(function(){
+            const $r = $(this);
+            const statusHtml = $r.find('.status').html() || '';
+            const statusTxt = $('<div>').html(statusHtml).text().trim();
+            data.push([
+                $r.find('.full_name').text().trim(),
+                $r.find('.email').text().trim(),
+                $r.find('.phone').text().trim(),
+                $r.find('.whatsapp').text().trim(),
+                statusTxt,
+            ]);
+        });
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Mentors');
+        const dt = new Date();
+        const pad = (n)=> (n<10?'0':'')+n;
+        const fname = `mentors-${dt.getFullYear()}${pad(dt.getMonth()+1)}${pad(dt.getDate())}.xlsx`;
+        XLSX.writeFile(wb, fname);
+    }
+    document.getElementById('btnExportMentorsXlsx').addEventListener('click', exportMentorsXlsx);
 
     function clearValidation() {
         mentorForm.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));

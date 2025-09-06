@@ -15,11 +15,30 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title">Daftar Mahasiswa</h3>
-            <button id="btnAddIntern" class="btn btn-primary">
-                <i class="ki-duotone ki-plus fs-2"></i> Tambah Mahasiswa
-            </button>
+        <div class="card-header flex-wrap d-flex align-items-center gap-2">
+            <h3 class="card-title mb-0 me-4">Daftar Mahasiswa</h3>
+            <!-- Left controls: search + filter -->
+            <div class="d-flex align-items-center gap-2 flex-wrap my-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" id="internsSearch" class="form-control form-control-sm" placeholder="Cari kata kunci...">
+                </div>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="bi bi-funnel"></i></span>
+                    <select id="programStudiFilter" class="form-select form-select-sm">
+                        <option value="">Semua Program Studi</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Right controls: buttons -->
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                <button id="btnExportXlsx" class="btn btn-light-success btn-sm">
+                    <i class="bi bi-file-earmark-excel"></i> Export Excel
+                </button>
+                <button id="btnAddIntern" class="btn btn-primary btn-sm">
+                    <i class="ki-duotone ki-plus fs-2"></i> Tambah Mahasiswa
+                </button>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -199,6 +218,8 @@
 
 @section('extra_js')
 <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+<!-- SheetJS for Excel export -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
     const CSRF_TOKEN = '{{ csrf_token() }}';
     const routes = {
@@ -237,6 +258,77 @@
         ordering: true,
         searching: true
     });
+
+    // Populate Program Studi filter options from table data
+    function populateProgramStudiFilter() {
+        const set = new Set();
+        $('#internsTable tbody tr').each(function(){
+            const txt = $(this).find('.program_studi').text().trim();
+            if (txt) set.add(txt);
+        });
+        const select = document.getElementById('programStudiFilter');
+        const current = select.value;
+        // clear except first option
+        select.querySelectorAll('option:not(:first-child)').forEach(o=>o.remove());
+        Array.from(set).sort().forEach(val => {
+            const opt = document.createElement('option');
+            opt.value = val;
+            opt.textContent = val;
+            select.appendChild(opt);
+        });
+        // restore selection if exists
+        if ([...select.options].some(o=>o.value===current)) select.value = current;
+    }
+    populateProgramStudiFilter();
+
+    // Keyword search
+    document.getElementById('internsSearch').addEventListener('input', function(){
+        table.search(this.value).draw();
+    });
+
+    // Program studi filter (column index 6)
+    document.getElementById('programStudiFilter').addEventListener('change', function(){
+        const val = this.value;
+        if (!val) {
+            table.column(6).search('').draw();
+        } else {
+            // exact match
+            table.column(6).search('^'+$.fn.dataTable.util.escapeRegex(val)+'$', true, false).draw();
+        }
+    });
+
+    // Export XLSX (current filtered rows)
+    function tableToXlsx() {
+        const rows = table.rows({ search: 'applied' }).nodes();
+        const headers = ['Nama','Email','Pembimbing','Dosen','Kampus','NIM','Program Studi','Status'];
+        const data = [headers];
+        $(rows).each(function(){
+            const $r = $(this);
+            const statusHtml = $r.find('.status').html() || '';
+            const statusTxt = $('<div>').html(statusHtml).text().trim();
+            data.push([
+                $r.find('.full_name').text().trim(),
+                $r.find('.email').text().trim(),
+                $r.find('.pembina_name').text().trim(),
+                $r.find('.dosen_name').text().trim(),
+                $r.find('.campus_name').text().trim(),
+                $r.find('.nim').text().trim(),
+                $r.find('.program_studi').text().trim(),
+                statusTxt,
+            ]);
+        });
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Interns');
+        const dt = new Date();
+        const pad = (n)=> (n<10?'0':'')+n;
+        const fname = `interns-${dt.getFullYear()}${pad(dt.getMonth()+1)}${pad(dt.getDate())}.xlsx`;
+        XLSX.writeFile(wb, fname);
+    }
+    document.getElementById('btnExportXlsx').addEventListener('click', tableToXlsx);
+
+    // Rebuild program studi options when table changes (e.g., adding new data)
+    table.on('draw', function(){ /* no-op for now */ });
 
     function clearValidation() {
         internForm.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));

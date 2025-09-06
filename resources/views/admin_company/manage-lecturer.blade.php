@@ -23,11 +23,22 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title">Daftar Dosen</h3>
-            <button id="btnAddLecturer" class="btn btn-primary">
-                <i class="ki-duotone ki-plus fs-2"></i> Tambah Dosen
-            </button>
+        <div class="card-header flex-wrap d-flex align-items-center gap-2">
+            <h3 class="card-title mb-0 me-4">Daftar Dosen</h3>
+            <div class="d-flex align-items-center gap-2 flex-wrap my-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" id="lecturersSearch" class="form-control form-control-sm" placeholder="Cari kata kunci...">
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                <button id="btnExportLecturersXlsx" class="btn btn-light-success btn-sm">
+                    <i class="bi bi-file-earmark-excel"></i> Export Excel
+                </button>
+                <button id="btnAddLecturer" class="btn btn-primary btn-sm">
+                    <i class="ki-duotone ki-plus fs-2"></i> Tambah Dosen
+                </button>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -207,6 +218,8 @@
 
 @section('extra_js')
 <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+<!-- SheetJS for Excel export -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
     const CSRF_TOKEN = '{{ csrf_token() }}';
     const routes = {
@@ -241,6 +254,39 @@
         ordering: true,
         searching: true
     });
+
+    // Keyword search (DataTables global search)
+    document.getElementById('lecturersSearch').addEventListener('input', function(){
+        table.search(this.value).draw();
+    });
+
+    // Export XLSX (current filtered rows)
+    function exportLecturersXlsx() {
+        const rows = table.rows({ search: 'applied' }).nodes();
+        const headers = ['Nama','Email','Kampus','Phone','WhatsApp','Status'];
+        const data = [headers];
+        $(rows).each(function(){
+            const $r = $(this);
+            const statusHtml = $r.find('.status').html() || '';
+            const statusTxt = $('<div>').html(statusHtml).text().trim();
+            data.push([
+                $r.find('.full_name').text().trim(),
+                $r.find('.email').text().trim(),
+                $r.find('.campus_name').text().trim(),
+                $r.find('.phone').text().trim(),
+                $r.find('.whatsapp').text().trim(),
+                statusTxt,
+            ]);
+        });
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Lecturers');
+        const dt = new Date();
+        const pad = (n)=> (n<10?'0':'')+n;
+        const fname = `lecturers-${dt.getFullYear()}${pad(dt.getMonth()+1)}${pad(dt.getDate())}.xlsx`;
+        XLSX.writeFile(wb, fname);
+    }
+    document.getElementById('btnExportLecturersXlsx').addEventListener('click', exportLecturersXlsx);
 
     function clearValidation() {
         lecturerForm.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));

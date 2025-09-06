@@ -149,8 +149,6 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
 		<script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
 		<!--end::Global Javascript Bundle-->
-		<!--begin::Custom Javascript(used for this page only)-->
-		<script src="{{ asset('assets/js/custom/authentication/sign-in/general.js') }}"></script>
 		<!-- Toast for error messages -->
 		@if(session('error') || ($errors && $errors->any()))
 			<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100;">
