@@ -105,7 +105,7 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="/logout">
+                    <a class="menu-link" href="{{ route('logout') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                         <span class="menu-title">Logout</span>
                     </a>
