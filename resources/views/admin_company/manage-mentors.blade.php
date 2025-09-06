@@ -49,8 +49,12 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-light-primary btnEdit" data-id="{{ $u->id }}">Edit</button>
-                                    <button class="btn btn-sm btn-light-danger btnDelete" data-id="{{ $u->id }}">Hapus</button>
+                                    <button class="btn btn-sm btn-light-primary btnEdit" data-id="{{ $u->id }}">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-light-danger btnDelete" data-id="{{ $u->id }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach

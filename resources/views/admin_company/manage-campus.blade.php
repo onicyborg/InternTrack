@@ -32,10 +32,10 @@
                                 <td class="alamat_campus">{{ $c->alamat_campus }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-light-primary btnEdit" data-id="{{ $c->id }}">
-                                        Edit
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>
                                     <button class="btn btn-sm btn-light-danger btnDelete" data-id="{{ $c->id }}">
-                                        Hapus
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
                             </tr>
