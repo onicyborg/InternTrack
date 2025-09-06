@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\MentorsController;
+use App\Http\Controllers\InternsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,4 +67,13 @@ Route::prefix('company-admin')->middleware(['auth','role:company_admin'])->group
     Route::post('/mentors', [MentorsController::class, 'store'])->name('company_admin.mentors.store');
     Route::put('/mentors/{id}', [MentorsController::class, 'update'])->name('company_admin.mentors.update');
     Route::delete('/mentors/{id}', [MentorsController::class, 'destroy'])->name('company_admin.mentors.destroy');
+
+    // Interns (Mahasiswa) Management
+    Route::get('/interns', [InternsController::class, 'index'])->name('company_admin.interns.index');
+    Route::get('/interns/{id}', [InternsController::class, 'show'])->name('company_admin.interns.show');
+    Route::post('/interns', [InternsController::class, 'store'])->name('company_admin.interns.store');
+    Route::put('/interns/{id}', [InternsController::class, 'update'])->name('company_admin.interns.update');
+    Route::delete('/interns/{id}', [InternsController::class, 'destroy'])->name('company_admin.interns.destroy');
+    // Helper: get lecturers by campus for dependent dropdown
+    Route::get('/campuses/{campusId}/lecturers', [InternsController::class, 'lecturersByCampus'])->name('company_admin.interns.lecturers_by_campus');
 });

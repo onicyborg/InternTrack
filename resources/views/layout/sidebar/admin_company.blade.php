@@ -33,7 +33,7 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="/">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                         <span class="menu-title">Dashboard</span>
                     </a>
@@ -69,7 +69,7 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="{{ route('company_admin.interns.index') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                         <span class="menu-title">Interns (Mahasiswa)</span>
                     </a>
