@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\MentorsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,4 +59,11 @@ Route::prefix('company-admin')->middleware(['auth','role:company_admin'])->group
     Route::post('/lecturers', [LecturerController::class, 'store'])->name('company_admin.lecturers.store');
     Route::put('/lecturers/{id}', [LecturerController::class, 'update'])->name('company_admin.lecturers.update');
     Route::delete('/lecturers/{id}', [LecturerController::class, 'destroy'])->name('company_admin.lecturers.destroy');
+
+    // Mentors (Pembina) Management
+    Route::get('/mentors', [MentorsController::class, 'index'])->name('company_admin.mentors.index');
+    Route::get('/mentors/{id}', [MentorsController::class, 'show'])->name('company_admin.mentors.show');
+    Route::post('/mentors', [MentorsController::class, 'store'])->name('company_admin.mentors.store');
+    Route::put('/mentors/{id}', [MentorsController::class, 'update'])->name('company_admin.mentors.update');
+    Route::delete('/mentors/{id}', [MentorsController::class, 'destroy'])->name('company_admin.mentors.destroy');
 });
