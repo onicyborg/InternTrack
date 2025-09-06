@@ -71,7 +71,16 @@
                 <div class="menu-item">
                     <a class="menu-link" href="#">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
-                        <span class="menu-title">Settings</span>
+                        <span class="menu-title">Profile</span>
+                    </a>
+                </div>
+                <!--end:Menu item-->
+
+                <!--begin:Menu item-->
+                <div class="menu-item">
+                    <a class="menu-link" href="/logout">
+                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                        <span class="menu-title">Logout</span>
                     </a>
                 </div>
                 <!--end:Menu item-->

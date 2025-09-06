@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CampusController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,22 +16,38 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin_company.index');
+// routes for guest
+Route::middleware('guest')->group(function () {
+    Route::get('login', function () {
+        return view('login');
+    })->name('login');
+    Route::post('login', [AuthController::class, 'login'])->name('login.attempt');
 });
 
-Route::prefix('admin')->middleware('role:admin')->group(function () {
-
+// routes for user with auth
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 Route::prefix('dosen')->middleware('role:dosen')->group(function () {
 
 });
 
-Route::prefix('pembina')->middleware('role:pembina')->group(function (){
+Route::prefix('pembina')->middleware('role:pembina')->group(function () {
 
 });
 
-Route::prefix('mahasiswa')->middleware('role:mahasiswa')->group(function (){
+Route::prefix('mahasiswa')->middleware('role:mahasiswa')->group(function () {
 
+});
+
+// Company Admin routes
+Route::prefix('company-admin')->middleware(['auth','role:company_admin'])->group(function () {
+    // Campuses Management
+    Route::get('/campuses', [CampusController::class, 'index'])->name('company_admin.campuses.index');
+    Route::get('/campuses/{id}', [CampusController::class, 'show'])->name('company_admin.campuses.show');
+    Route::post('/campuses', [CampusController::class, 'store'])->name('company_admin.campuses.store');
+    Route::put('/campuses/{id}', [CampusController::class, 'update'])->name('company_admin.campuses.update');
+    Route::delete('/campuses/{id}', [CampusController::class, 'destroy'])->name('company_admin.campuses.destroy');
 });
