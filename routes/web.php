@@ -47,6 +47,12 @@ Route::prefix('mahasiswa')->middleware('role:mahasiswa')->group(function () {
 
 // Company Admin routes
 Route::prefix('company-admin')->middleware(['auth','role:company_admin'])->group(function () {
+    // Profile
+    Route::get('/profile', [AuthController::class, 'profile'])->name('company_admin.profile');
+    Route::put('/profile', [AuthController::class, 'updateProfile'])->name('company_admin.profile.update');
+    Route::post('/profile/photo', [AuthController::class, 'updateProfilePhoto'])->name('company_admin.profile.photo');
+    Route::post('/profile/change-password', [AuthController::class, 'changePassword'])->name('company_admin.profile.change_password');
+
     // Campuses Management
     Route::get('/campuses', [CampusController::class, 'index'])->name('company_admin.campuses.index');
     Route::get('/campuses/{id}', [CampusController::class, 'show'])->name('company_admin.campuses.show');
