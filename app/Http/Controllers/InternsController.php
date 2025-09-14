@@ -62,6 +62,8 @@ class InternsController extends Controller
             'whatsapp' => 'nullable|string|max:50',
             'nim' => 'required|string|max:100',
             'program_studi' => 'required|string|max:150',
+            'start_magang' => 'nullable|date_format:Y-m-d',
+            'end_magang' => 'nullable|date_format:Y-m-d|after_or_equal:start_magang',
             'is_active' => 'nullable|boolean',
             'password' => 'nullable|string|min:6',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -89,6 +91,8 @@ class InternsController extends Controller
         $profile->whatsapp = $payload['whatsapp'] ?? null;
         $profile->nim = $payload['nim'];
         $profile->program_studi = $payload['program_studi'];
+        $profile->start_magang = $payload['start_magang'] ?? null;
+        $profile->end_magang = $payload['end_magang'] ?? null;
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('public/profiles');
             $profile->photo_url = Storage::url($path);
@@ -124,6 +128,8 @@ class InternsController extends Controller
             'whatsapp' => 'nullable|string|max:50',
             'nim' => 'required|string|max:100',
             'program_studi' => 'required|string|max:150',
+            'start_magang' => 'nullable|date_format:Y-m-d',
+            'end_magang' => 'nullable|date_format:Y-m-d|after_or_equal:start_magang',
             'is_active' => 'nullable|boolean',
             'password' => 'nullable|string|min:6',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -148,6 +154,8 @@ class InternsController extends Controller
         $profile->whatsapp = $payload['whatsapp'] ?? null;
         $profile->nim = $payload['nim'];
         $profile->program_studi = $payload['program_studi'];
+        $profile->start_magang = $payload['start_magang'] ?? null;
+        $profile->end_magang = $payload['end_magang'] ?? null;
         if ($request->boolean('photo_remove')) {
             if (!empty($profile->photo_url) && str_starts_with($profile->photo_url, '/storage/')) {
                 $storagePath = 'public/' . ltrim(substr($profile->photo_url, strlen('/storage/')), '/');

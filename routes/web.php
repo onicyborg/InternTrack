@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\MentorsController;
 use App\Http\Controllers\InternsController;
+use App\Http\Controllers\LogbookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,8 +43,19 @@ Route::prefix('pembina')->middleware('role:pembina')->group(function () {
 
 });
 
-Route::prefix('mahasiswa')->middleware('role:mahasiswa')->group(function () {
-
+Route::prefix('mahasiswa')->middleware(['auth','role:mahasiswa'])->group(function () {
+    // Absensi (check-in & check-out)
+    Route::post('/attendance/checkin', [AttendanceController::class, 'checkin'])->name('mahasiswa.attendance.checkin');
+    Route::post('/attendance/checkout', [AttendanceController::class, 'checkout'])->name('mahasiswa.attendance.checkout');
+    // Attendance history page and data
+    Route::get('/attendance', [AttendanceController::class, 'history'])->name('mahasiswa.attendance.index');
+    Route::get('/attendance/data', [AttendanceController::class, 'historyData'])->name('mahasiswa.attendance.data');
+    // Logbooks
+    Route::get('/logbooks', [LogbookController::class, 'index'])->name('mahasiswa.logbooks.index');
+    Route::post('/logbooks', [LogbookController::class, 'store'])->name('mahasiswa.logbooks.store');
+    Route::get('/logbooks/{id}', [LogbookController::class, 'show'])->name('mahasiswa.logbooks.show');
+    Route::put('/logbooks/{id}', [LogbookController::class, 'update'])->name('mahasiswa.logbooks.update');
+    Route::delete('/logbooks/{id}', [LogbookController::class, 'destroy'])->name('mahasiswa.logbooks.destroy');
 });
 
 // Company Admin routes

@@ -51,8 +51,8 @@
     <div class="d-flex flex-column flex-root" id="kt_app_root">
         <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
             <!--begin::Header-->
-            <div id="kt_app_header" class="app-header">
-                <header class="app-header py-4 px-6 border-bottom w-100">
+            <div id="kt_app_header" class="app-header bg-body">
+                <header class="app-header py-4 px-6 border-bottom w-100 bg-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center gap-3">
                             <a href="/" class="fs-4 fw-bold text-decoration-none">InternTrack</a>

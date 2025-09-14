@@ -24,6 +24,8 @@ class Profiles extends Model
         'nik',
         'nim',
         'program_studi',
+        'start_magang',
+        'end_magang',
     ];
 
     public function user()

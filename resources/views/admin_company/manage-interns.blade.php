@@ -180,6 +180,19 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-5">
+                                <label class="form-label">Masuk Magang</label>
+                                <input type="date" name="start_magang" id="start_magang" class="form-control">
+                                <div class="invalid-feedback" data-field="start_magang"></div>
+                            </div>
+                            <div class="col-md-6 mb-5">
+                                <label class="form-label">Selesai Magang</label>
+                                <input type="date" name="end_magang" id="end_magang" class="form-control">
+                                <div class="invalid-feedback" data-field="end_magang"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-5">
                                 <label class="form-label">Phone</label>
                                 <input type="text" name="phone" id="phone" class="form-control">
                                 <div class="invalid-feedback" data-field="phone"></div>
@@ -243,6 +256,8 @@
     const dosenId = document.getElementById('dosen_user_id');
     const nim = document.getElementById('nim');
     const programStudi = document.getElementById('program_studi');
+    const startMagang = document.getElementById('start_magang');
+    const endMagang = document.getElementById('end_magang');
     const phone = document.getElementById('phone');
     const whatsapp = document.getElementById('whatsapp');
     const password = document.getElementById('password');
@@ -400,6 +415,18 @@
                 campusId.value = d.campus_id || '';
                 nim.value = d.profile?.nim || '';
                 programStudi.value = d.profile?.program_studi || '';
+                // Dates: ensure formatted as YYYY-MM-DD
+                const fmtDate = (s)=> {
+                    if (!s) return '';
+                    // if already yyyy-mm-dd, return as is
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+                    const dt = new Date(s);
+                    if (isNaN(dt)) return '';
+                    const pad = (n)=> (n<10?'0':'')+n;
+                    return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
+                };
+                startMagang.value = fmtDate(d.profile?.start_magang || '');
+                endMagang.value = fmtDate(d.profile?.end_magang || '');
                 phone.value = d.profile?.phone || '';
                 whatsapp.value = d.profile?.whatsapp || '';
                 const imgUrl = d.profile?.photo_url || `{{ asset('assets/media/avatars/blank.png') }}`;
@@ -456,6 +483,8 @@
         formData.append('dosen_user_id', dosenId.value);
         formData.append('nim', nim.value);
         formData.append('program_studi', programStudi.value);
+        formData.append('start_magang', startMagang.value);
+        formData.append('end_magang', endMagang.value);
         formData.append('phone', phone.value);
         formData.append('whatsapp', whatsapp.value);
         formData.append('is_active', isActive.checked ? 1 : 0);

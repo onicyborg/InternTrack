@@ -33,7 +33,7 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="{{ route('dashboard') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                         <span class="menu-title">Dashboard</span>
                     </a>
@@ -42,18 +42,18 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="{{ route('mahasiswa.attendance.index') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
-                        <span class="menu-title">Logbooks</span>
+                        <span class="menu-title">Attendances</span>
                     </a>
                 </div>
                 <!--end:Menu item-->
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="{{ route('mahasiswa.logbooks.index') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
-                        <span class="menu-title">Attendances</span>
+                        <span class="menu-title">Logbooks</span>
                     </a>
                 </div>
                 <!--end:Menu item-->

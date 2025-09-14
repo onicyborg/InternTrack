@@ -11,7 +11,7 @@
         $campusTotal = $campusTotal ?? 0;
     @endphp
 
-    <div class="row g-6">
+    <div class="row g-6 mb-6">
         <!-- Card: Total Mahasiswa -->
         <div class="col-sm-6 col-xxl-3">
             <div class="card h-100">

@@ -26,6 +26,7 @@ class Attandances extends Model
         'ttd_checkout_url',
         'is_approve_dosen',
         'is_approve_pembina',
+        'status',
     ];
 
     public function user()
