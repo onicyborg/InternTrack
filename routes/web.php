@@ -56,6 +56,11 @@ Route::prefix('mahasiswa')->middleware(['auth','role:mahasiswa'])->group(functio
     Route::get('/logbooks/{id}', [LogbookController::class, 'show'])->name('mahasiswa.logbooks.show');
     Route::put('/logbooks/{id}', [LogbookController::class, 'update'])->name('mahasiswa.logbooks.update');
     Route::delete('/logbooks/{id}', [LogbookController::class, 'destroy'])->name('mahasiswa.logbooks.destroy');
+    // Profile
+    Route::get('/profile', [AuthController::class, 'studentProfile'])->name('mahasiswa.profile');
+    Route::put('/profile', [AuthController::class, 'updateStudentProfile'])->name('mahasiswa.profile.update');
+    Route::post('/profile/photo', [AuthController::class, 'updateProfilePhoto'])->name('mahasiswa.profile.photo');
+    Route::post('/profile/change-password', [AuthController::class, 'changePassword'])->name('mahasiswa.profile.change_password');
 });
 
 // Company Admin routes

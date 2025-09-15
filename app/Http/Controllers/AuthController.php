@@ -56,6 +56,15 @@ class AuthController extends Controller
     }
 
     /**
+     * Show the authenticated student's profile page.
+     */
+    public function studentProfile()
+    {
+        $user = Auth::user();
+        return view('mahasiswa.profile', compact('user'));
+    }
+
+    /**
      * Update authenticated user's basic profile data (name, phone, email)
      */
     public function updateProfile(Request $request)
@@ -86,6 +95,48 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Profil berhasil diperbarui',
+            'data' => $user,
+        ]);
+    }
+
+    /**
+     * Update authenticated student's profile data including NIM and Study Program
+     */
+    public function updateStudentProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'full_name' => ['nullable','string','max:255'],
+            'nim' => ['nullable','string','max:100'],
+            'study_program' => ['nullable','string','max:255'],
+            'phone' => ['nullable','string','max:50'],
+            'email' => ['required','email','max:255','unique:users,email,' . $user->id . ',id'],
+        ]);
+
+        $profile = $user->profile()->firstOrCreate(['user_id' => $user->id]);
+        if (array_key_exists('full_name', $validated)) {
+            $profile->full_name = $validated['full_name'];
+        }
+        if (array_key_exists('nim', $validated)) {
+            $profile->nim = $validated['nim'];
+        }
+        if (array_key_exists('study_program', $validated)) {
+            // Kolom pada database adalah program_studi (bukan study_program)
+            $profile->program_studi = $validated['study_program'];
+        }
+        if (array_key_exists('phone', $validated)) {
+            $profile->phone = $validated['phone'];
+        }
+        $profile->save();
+
+        $user->email = $validated['email'];
+        $user->save();
+
+        $user->load(['profile']);
+
+        return response()->json([
+            'message' => 'Profil mahasiswa berhasil diperbarui',
             'data' => $user,
         ]);
     }
