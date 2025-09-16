@@ -67,7 +67,7 @@ class LecturerController extends Controller
         $user->email = $payload['email'];
         $user->campus_id = $payload['campus_id'];
         $user->is_active = $payload['is_active'] ?? true;
-        $user->password = Hash::make($payload['password'] ?? 'Qwert123*');
+        $user->password = Hash::make($payload['password'] ?? 'Qwerty123*');
         $user->save();
 
         $profile = new Profiles();
@@ -133,6 +133,7 @@ class LecturerController extends Controller
         $profile->full_name = $payload['full_name'];
         $profile->phone = $payload['phone'] ?? null;
         $profile->whatsapp = $payload['whatsapp'] ?? null;
+        $profile->nik = $payload['nik'] ?? null;
         // Photo removal if requested
         if ($request->boolean('photo_remove')) {
             if (!empty($profile->photo_url) && str_starts_with($profile->photo_url, '/storage/')) {

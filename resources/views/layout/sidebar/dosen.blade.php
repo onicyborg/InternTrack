@@ -33,7 +33,7 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="/">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                         <span class="menu-title">Dashboard</span>
                     </a>
@@ -42,9 +42,9 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="{{ route('dosen.attendance.index') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
-                        <span class="menu-title">Mahasiswa Bimbingan</span>
+                        <span class="menu-title">Attendance</span>
                     </a>
                 </div>
                 <!--end:Menu item-->
@@ -53,16 +53,7 @@
                 <div class="menu-item">
                     <a class="menu-link" href="#">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
-                        <span class="menu-title">Approve Attendances</span>
-                    </a>
-                </div>
-                <!--end:Menu item-->
-
-                <!--begin:Menu item-->
-                <div class="menu-item">
-                    <a class="menu-link" href="#">
-                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
-                        <span class="menu-title">Approve Logbooks</span>
+                        <span class="menu-title">Logbooks</span>
                     </a>
                 </div>
                 <!--end:Menu item-->

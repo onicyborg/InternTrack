@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceDosenController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampusController;
@@ -36,7 +37,12 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::prefix('dosen')->middleware('role:dosen')->group(function () {
-
+    // Attendance listing for lecturer's supervised students
+    Route::get('/attendance', [AttendanceDosenController::class, 'index'])->name('dosen.attendance.index');
+    // Detail attendance per mahasiswa binaan
+    Route::get('/attendance/{userId}', [AttendanceDosenController::class, 'show'])->name('dosen.attendance.show');
+    // Approve specific attendance record
+    Route::post('/attendance/{attendanceId}/approve', [AttendanceDosenController::class, 'approve'])->name('dosen.attendance.approve');
 });
 
 Route::prefix('pembina')->middleware('role:pembina')->group(function () {

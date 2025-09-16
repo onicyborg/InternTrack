@@ -81,7 +81,7 @@ class InternsController extends Controller
         $user->pembina_user_id = $payload['pembina_user_id'];
         $user->dosen_user_id = $payload['dosen_user_id'];
         $user->is_active = $payload['is_active'] ?? true;
-        $user->password = Hash::make($payload['password'] ?? 'Qwert123*');
+        $user->password = Hash::make($payload['password'] ?? 'Qwerty123*');
         $user->save();
 
         $profile = new Profiles();

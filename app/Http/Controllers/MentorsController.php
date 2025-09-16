@@ -60,7 +60,7 @@ class MentorsController extends Controller
         $user->role = 'pembina';
         $user->email = $payload['email'];
         $user->is_active = $payload['is_active'] ?? true;
-        $user->password = Hash::make($payload['password'] ?? 'Qwert123*');
+        $user->password = Hash::make($payload['password'] ?? 'Qwerty123*');
         $user->save();
 
         $profile = new Profiles();
