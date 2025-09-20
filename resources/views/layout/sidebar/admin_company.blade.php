@@ -78,7 +78,7 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="{{ route('company_admin.attendance.index') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                         <span class="menu-title">Attendances</span>
                     </a>
@@ -87,7 +87,7 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="{{ route('company_admin.logbooks.index') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                         <span class="menu-title">Logbooks</span>
                     </a>

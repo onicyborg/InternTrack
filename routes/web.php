@@ -12,6 +12,8 @@ use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\LogbooksDosenController;
 use App\Http\Controllers\AttendancePembinaController;
 use App\Http\Controllers\LogbooksPembinaController;
+use App\Http\Controllers\AttendanceAdminController;
+use App\Http\Controllers\LogbooksAdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -149,4 +151,16 @@ Route::prefix('company-admin')->middleware(['auth','role:company_admin'])->group
     Route::delete('/interns/{id}', [InternsController::class, 'destroy'])->name('company_admin.interns.destroy');
     // Helper: get lecturers by campus for dependent dropdown
     Route::get('/campuses/{campusId}/lecturers', [InternsController::class, 'lecturersByCampus'])->name('company_admin.interns.lecturers_by_campus');
+
+    // Attendance (read-only) for all students
+    Route::get('/attendance', [AttendanceAdminController::class, 'index'])->name('company_admin.attendance.index');
+    Route::get('/attendance/{userId}', [AttendanceAdminController::class, 'show'])->name('company_admin.attendance.show');
+
+    // Logbooks (read-only) for all students
+    Route::get('/logbooks', [LogbooksAdminController::class, 'index'])->name('company_admin.logbooks.index');
+    Route::get('/logbooks/{userId}', [LogbooksAdminController::class, 'show'])->name('company_admin.logbooks.show');
+    // API: detail satu logbook milik mahasiswa (JSON)
+    Route::get('/logbooks/{userId}/logbooks/{logbookId}', [LogbooksAdminController::class, 'logbookDetail'])->name('company_admin.logbooks.detail');
+    // Download semua lampiran sebagai ZIP
+    Route::get('/logbooks/download-zip/{logbookId}', [LogbooksAdminController::class, 'downloadZip'])->name('company_admin.logbooks.download_zip');
 });
