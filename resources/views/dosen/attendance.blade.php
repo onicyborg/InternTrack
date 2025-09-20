@@ -9,6 +9,7 @@
         .table thead th { white-space: nowrap; }
         .search-bar .form-control { max-width: 280px; }
         .btn-action { min-width: 130px; }
+        .avatar-sm { width: 40px; height: 40px; object-fit: cover; }
     </style>
 @endsection
 
@@ -30,6 +31,7 @@
                     <thead>
                         <tr class="fw-semibold text-muted">
                             <th style="width: 60px;">No</th>
+                            <th style="width: 70px;">Foto</th>
                             <th style="width: 160px;">NIM</th>
                             <th>Nama Mahasiswa</th>
                             <th style="width: 180px;">Aksi</th>
@@ -40,9 +42,25 @@
                             @php
                                 $profile = optional($mhs->profile);
                                 $pending = (int) ($pendingMap[$mhs->id] ?? 0);
+                                // Siapkan URL foto jika ada, jika tidak gunakan avatar inisial
+                                $photo = $profile->photo_url ? asset($profile->photo_url) : null;
+                                $displayName = $profile->full_name ?? $mhs->email;
+                                // Pilih warna background dan teks secara pseudo-random berbasis nama (konsisten per user)
+                                $palette = ['1ABC9C','2ECC71','3498DB','9B59B6','E67E22','E74C3C','16A085','27AE60','2980B9','8E44AD','F39C12','D35400','C0392B','2C3E50','7F8C8D'];
+                                $seed = abs(crc32((string) $displayName));
+                                $bg = $palette[$seed % count($palette)];
+                                // Warna teks dipilih acak dari palet berbeda, berbasis seed juga agar konsisten per nama
+                                $fgPalette = ['FFFFFF','000000','F8F9FA','212529','FFD166','073B4C','EF476F'];
+                                $fg = $fgPalette[($seed >> 3) % count($fgPalette)];
+                                if (strtoupper($fg) === strtoupper($bg)) { $fg = 'FFFFFF'; }
+                                $avatarFallback = 'https://ui-avatars.com/api/?name=' . urlencode((string) $displayName) . '&size=64&background=' . $bg . '&color=' . $fg;
+                                $avatarUrl = $photo ?: $avatarFallback;
                             @endphp
                             <tr>
                                 <td>{{ $idx + 1 }}</td>
+                                <td>
+                                    <img src="{{ $avatarUrl }}" class="rounded-circle avatar-sm" alt="Foto {{ $profile->full_name ?? $mhs->email }}">
+                                </td>
                                 <td>{{ $profile->nim ?? '-' }}</td>
                                 <td>{{ $profile->full_name ?? $mhs->email }}</td>
                                 <td>
@@ -55,7 +73,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center text-muted">Belum ada mahasiswa binaan.</td>
+                                <td colspan="5" class="text-center text-muted">Belum ada mahasiswa binaan.</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -10,8 +10,8 @@
             <div class="card shadow-sm h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <div class="fw-bold">Total Mahasiswa Binaan</div>
-                        <div class="fs-2x fw-bolder">{{ $totalMahasiswaBinaan ?? 0 }}</div>
+                        <div class="fw-bold">Total Mahasiswa Bimbingan</div>
+                        <div class="fs-2x fw-bolder">{{ $totalMahasiswaBimbingan ?? 0 }}</div>
                     </div>
                     <div class="p-4 rounded-3 bg-light-primary">
                         <!-- Bootstrap Icons: people-fill -->

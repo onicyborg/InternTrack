@@ -44,12 +44,12 @@ class DashboardController extends Controller
             $user = Auth::user();
             $user->load(['profile', 'campus']);
 
-            // Total mahasiswa binaan (mahasiswa yang memiliki dosen_user_id = dosen saat ini)
-            $totalMahasiswaBinaan = User::where('role', 'mahasiswa')
+            // Total mahasiswa bimbingan (mahasiswa yang memiliki dosen_user_id = dosen saat ini)
+            $totalMahasiswaBimbingan = User::where('role', 'mahasiswa')
                 ->where('dosen_user_id', $user->id)
                 ->count();
 
-            // Absensi menunggu konfirmasi dosen (approve_dosen null atau 0) untuk mahasiswa binaan
+            // Absensi menunggu konfirmasi dosen (approve_dosen null atau 0) untuk mahasiswa bimbingan
             $pendingAbsensi = Attandances::whereHas('user', function ($q) use ($user) {
                     $q->where('dosen_user_id', $user->id);
                 })
@@ -58,7 +58,7 @@ class DashboardController extends Controller
                 })
                 ->count();
 
-            // Logbook menunggu konfirmasi dosen (approval_dosen null atau 0) untuk mahasiswa binaan
+            // Logbook menunggu konfirmasi dosen (approval_dosen null atau 0) untuk mahasiswa bimbingan
             $pendingLogbook = Logbooks::whereHas('user', function ($q) use ($user) {
                     $q->where('dosen_user_id', $user->id);
                 })
@@ -69,12 +69,45 @@ class DashboardController extends Controller
 
             return view('dosen.index', [
                 'user' => $user,
-                'totalMahasiswaBinaan' => $totalMahasiswaBinaan,
+                'totalMahasiswaBimbingan' => $totalMahasiswaBimbingan,
                 'pendingAbsensi' => $pendingAbsensi,
                 'pendingLogbook' => $pendingLogbook,
             ]);
         } elseif (Auth::user()->role == 'pembina') {
-            return view('pembina.index');
+            // Load current pembina with relations
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            $user->load(['profile', 'campus']);
+
+            // Total mahasiswa binaan (mahasiswa yang memiliki pembina_user_id = pembina saat ini)
+            $totalMahasiswaBinaan = User::where('role', 'mahasiswa')
+                ->where('pembina_user_id', $user->id)
+                ->count();
+
+            // Absensi menunggu konfirmasi pembina (is_approve_pembina null atau 0) untuk mahasiswa binaan
+            $pendingAbsensi = Attandances::whereHas('user', function ($q) use ($user) {
+                    $q->where('pembina_user_id', $user->id);
+                })
+                ->where(function ($q) {
+                    $q->whereNull('is_approve_pembina')->orWhere('is_approve_pembina', 0);
+                })
+                ->count();
+
+            // Logbook menunggu konfirmasi pembina (approval_pembina pending/reject) untuk mahasiswa binaan
+            $pendingLogbook = Logbooks::whereHas('user', function ($q) use ($user) {
+                    $q->where('pembina_user_id', $user->id);
+                })
+                ->where(function ($q) {
+                    $q->where('approval_pembina', 'pending')->orWhere('approval_pembina', 'reject');
+                })
+                ->count();
+
+            return view('pembina.index', [
+                'user' => $user,
+                'totalMahasiswaBinaan' => $totalMahasiswaBinaan,
+                'pendingAbsensi' => $pendingAbsensi,
+                'pendingLogbook' => $pendingLogbook,
+            ]);
         } elseif (Auth::user()->role == 'mahasiswa') {
             $user = Auth::user()->load(['profile', 'dosen.profile', 'pembina.profile', 'campus']);
 

@@ -10,6 +10,8 @@ use App\Http\Controllers\MentorsController;
 use App\Http\Controllers\InternsController;
 use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\LogbooksDosenController;
+use App\Http\Controllers\AttendancePembinaController;
+use App\Http\Controllers\LogbooksPembinaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,7 +66,29 @@ Route::prefix('dosen')->middleware('role:dosen')->group(function () {
 });
 
 Route::prefix('pembina')->middleware('role:pembina')->group(function () {
+    // Profile (uses AuthController)
+    Route::get('/profile', [AuthController::class, 'pembinaProfile'])->name('pembina.profile');
+    Route::put('/profile', [AuthController::class, 'updateProfile'])->name('pembina.profile.update');
+    Route::post('/profile/photo', [AuthController::class, 'updateProfilePhoto'])->name('pembina.profile.photo');
+    Route::post('/profile/change-password', [AuthController::class, 'changePassword'])->name('pembina.profile.change_password');
 
+    // Attendance listing for pembina's supervised students
+    Route::get('/attendance', [AttendancePembinaController::class, 'index'])->name('pembina.attendance.index');
+    // Detail attendance per mahasiswa binaan
+    Route::get('/attendance/{userId}', [AttendancePembinaController::class, 'show'])->name('pembina.attendance.show');
+    // Approve specific attendance record
+    Route::post('/attendance/{attendanceId}/approve', [AttendancePembinaController::class, 'approve'])->name('pembina.attendance.approve');
+
+    // Logbooks approval listing for pembina's supervised students
+    Route::get('/logbooks-approval', [LogbooksPembinaController::class, 'index'])->name('pembina.logbooks_approval.index');
+    // Logbooks approval detail per mahasiswa binaan
+    Route::get('/logbooks-approval/{userId}', [LogbooksPembinaController::class, 'show'])->name('pembina.logbooks_approval.show');
+    // API: detail satu logbook milik mahasiswa binaan (JSON)
+    Route::get('/logbooks-approval/{userId}/logbooks/{logbookId}', [LogbooksPembinaController::class, 'logbookDetail'])->name('pembina.logbooks_approval.detail');
+    // Action: approve/reject dengan remark oleh pembina
+    Route::post('/logbooks-approval/decide/{logbookId}', [LogbooksPembinaController::class, 'decide'])->name('pembina.logbooks_approval.decide');
+    // Download semua lampiran sebagai ZIP
+    Route::get('/logbooks-approval/download-zip/{logbookId}', [LogbooksPembinaController::class, 'downloadZip'])->name('pembina.logbooks_approval.download_zip');
 });
 
 Route::prefix('mahasiswa')->middleware(['auth','role:mahasiswa'])->group(function () {

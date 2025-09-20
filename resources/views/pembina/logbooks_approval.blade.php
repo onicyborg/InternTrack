@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Dosen - Persetujuan Logbook Mahasiswa')
+@section('title', 'Pembina - Persetujuan Logbook Mahasiswa')
 @section('page_heading', 'Persetujuan Logbook Mahasiswa')
 
 @section('extra_css')
@@ -65,7 +65,7 @@
                                 <td>{{ $profile->full_name ?? $mhs->email }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
-                                        <a href="{{ route('dosen.logbooks_approval.show', $mhs->id) }}" class="btn btn-sm btn-action {{ $pending > 0 ? 'btn-warning' : 'btn-primary' }}">
+                                        <a href="{{ route('pembina.logbooks_approval.show', $mhs->id) }}" class="btn btn-sm btn-action {{ $pending > 0 ? 'btn-warning' : 'btn-primary' }}">
                                             {{ $pending > 0 ? ('Verifikasi Logbook (' . $pending . ')') : 'Lihat Logbook' }}
                                         </a>
                                     </div>

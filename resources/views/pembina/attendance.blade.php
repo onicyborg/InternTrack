@@ -1,14 +1,14 @@
 @extends('layout.master')
 
-@section('title', 'Dosen - Persetujuan Logbook Mahasiswa')
-@section('page_heading', 'Persetujuan Logbook Mahasiswa')
+@section('title', 'Pembina - Attendance Mahasiswa')
+@section('page_heading', 'Attendance Mahasiswa (Pembina)')
 
 @section('extra_css')
     <link rel="stylesheet" href="https://cdn.datatables.net/v/bs5/dt-1.13.6/r-2.5.0/datatables.min.css" />
     <style>
         .table thead th { white-space: nowrap; }
         .search-bar .form-control { max-width: 280px; }
-        .btn-action { min-width: 160px; }
+        .btn-action { min-width: 130px; }
         .avatar-sm { width: 40px; height: 40px; object-fit: cover; }
     </style>
 @endsection
@@ -16,7 +16,7 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex align-items-center flex-wrap gap-3">
-            <h3 class="card-title m-0">Data Logbook Magang Mahasiswa</h3>
+            <h3 class="card-title m-0">Data Absensi Magang Mahasiswa</h3>
             <div class="ms-auto search-bar">
                 <div class="input-group input-group-sm">
                     <input type="text" id="searchInput" class="form-control form-control-sm"
@@ -41,7 +41,7 @@
                         @forelse($students as $idx => $mhs)
                             @php
                                 $profile = optional($mhs->profile);
-                                $pending = (int) ($pendingMap[$mhs->id] ?? 0); // jumlah logbook menunggu approval
+                                $pending = (int) ($pendingMap[$mhs->id] ?? 0);
                                 // Siapkan URL foto jika ada, jika tidak gunakan avatar inisial
                                 $photo = $profile->photo_url ? asset($profile->photo_url) : null;
                                 $displayName = $profile->full_name ?? $mhs->email;
@@ -65,8 +65,8 @@
                                 <td>{{ $profile->full_name ?? $mhs->email }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
-                                        <a href="{{ route('dosen.logbooks_approval.show', $mhs->id) }}" class="btn btn-sm btn-action {{ $pending > 0 ? 'btn-warning' : 'btn-primary' }}">
-                                            {{ $pending > 0 ? ('Verifikasi Logbook (' . $pending . ')') : 'Lihat Logbook' }}
+                                        <a href="{{ route('pembina.attendance.show', $mhs->id) }}" class="btn btn-sm btn-action {{ $pending > 0 ? 'btn-warning' : 'btn-primary' }}">
+                                            {{ $pending > 0 ? 'Verifikasi Data' : 'Lihat Data' }}
                                         </a>
                                     </div>
                                 </td>

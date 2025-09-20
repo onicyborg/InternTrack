@@ -74,6 +74,15 @@ class AuthController extends Controller
     }
 
     /**
+     * Show the authenticated mentor's (pembina) profile page.
+     */
+    public function pembinaProfile()
+    {
+        $user = Auth::user();
+        return view('pembina.profile', compact('user'));
+    }
+
+    /**
      * Update authenticated user's basic profile data (name, phone, email)
      */
     public function updateProfile(Request $request)

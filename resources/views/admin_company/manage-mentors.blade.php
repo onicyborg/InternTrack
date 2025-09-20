@@ -61,10 +61,10 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-sm btn-light-primary btnEdit" data-id="{{ $u->id }}">
-                                        <i class="bi bi-pencil-square"></i>
+                                        <center><i class="bi bi-pencil-square"></i></center>
                                     </button>
                                     <button class="btn btn-sm btn-light-danger btnDelete" data-id="{{ $u->id }}">
-                                        <i class="bi bi-trash"></i>
+                                        <center><i class="bi bi-trash"></i></center>
                                     </button>
                                 </td>
                             </tr>
