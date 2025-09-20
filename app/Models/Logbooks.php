@@ -23,6 +23,8 @@ class Logbooks extends Model
         'end_date',
         'approval_dosen',
         'approval_pembina',
+        'remark_dosen',
+        'remark_pembina',
     ];
 
     public function user()

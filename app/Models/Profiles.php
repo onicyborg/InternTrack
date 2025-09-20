@@ -26,6 +26,8 @@ class Profiles extends Model
         'program_studi',
         'start_magang',
         'end_magang',
+        'remark_dosen',
+        'remark_pembina',
     ];
 
     public function user()

@@ -106,6 +106,14 @@
                         </div>
 
                         <div class="mb-6">
+                            <label class="form-label">Kampus</label>
+                            <input type="text" class="form-control" id="campus" name="campus"
+                                value="{{ optional(optional($user)->campus)->nama_campus ?? '' }}"
+                                placeholder="Kampus" disabled>
+                            <div class="invalid-feedback" data-field="campus"></div>
+                        </div>
+
+                        <div class="mb-6">
                             <label class="form-label">NIM</label>
                             <input type="text" class="form-control" id="nim" name="nim"
                                 value="{{ optional(optional($user)->profile)->nim ?? '' }}"

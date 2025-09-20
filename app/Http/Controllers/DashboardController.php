@@ -63,7 +63,7 @@ class DashboardController extends Controller
                     $q->where('dosen_user_id', $user->id);
                 })
                 ->where(function ($q) {
-                    $q->where('approval_dosen', 'pending');
+                    $q->where('approval_dosen', 'pending')->orWhere('approval_dosen', 'reject');
                 })
                 ->count();
 

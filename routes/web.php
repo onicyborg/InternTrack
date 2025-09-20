@@ -9,6 +9,7 @@ use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\MentorsController;
 use App\Http\Controllers\InternsController;
 use App\Http\Controllers\LogbookController;
+use App\Http\Controllers\LogbooksDosenController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,12 +38,29 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::prefix('dosen')->middleware('role:dosen')->group(function () {
+    // Lecturer profile management (uses AuthController)
+    Route::get('/profile', [AuthController::class, 'lecturerProfile'])->name('dosen.profile');
+    Route::put('/profile', [AuthController::class, 'updateProfile'])->name('dosen.profile.update');
+    Route::post('/profile/photo', [AuthController::class, 'updateProfilePhoto'])->name('dosen.profile.photo');
+    Route::post('/profile/change-password', [AuthController::class, 'changePassword'])->name('dosen.profile.change_password');
     // Attendance listing for lecturer's supervised students
     Route::get('/attendance', [AttendanceDosenController::class, 'index'])->name('dosen.attendance.index');
     // Detail attendance per mahasiswa binaan
     Route::get('/attendance/{userId}', [AttendanceDosenController::class, 'show'])->name('dosen.attendance.show');
     // Approve specific attendance record
     Route::post('/attendance/{attendanceId}/approve', [AttendanceDosenController::class, 'approve'])->name('dosen.attendance.approve');
+
+    // Logbooks approval listing for lecturer's supervised students
+    Route::get('/logbooks-approval', [LogbooksDosenController::class, 'index'])->name('dosen.logbooks_approval.index');
+    // Logbooks approval detail per mahasiswa binaan
+    Route::get('/logbooks-approval/{userId}', [LogbooksDosenController::class, 'show'])->name('dosen.logbooks_approval.show');
+
+    // API: detail satu logbook milik mahasiswa binaan (JSON)
+    Route::get('/logbooks-approval/{userId}/logbooks/{logbookId}', [LogbooksDosenController::class, 'logbookDetail'])->name('dosen.logbooks_approval.detail');
+    // Action: approve/reject dengan remark oleh dosen
+    Route::post('/logbooks-approval/decide/{logbookId}', [LogbooksDosenController::class, 'decide'])->name('dosen.logbooks_approval.decide');
+    // Download semua lampiran sebagai ZIP
+    Route::get('/logbooks-approval/download-zip/{logbookId}', [LogbooksDosenController::class, 'downloadZip'])->name('dosen.logbooks_approval.download_zip');
 });
 
 Route::prefix('pembina')->middleware('role:pembina')->group(function () {

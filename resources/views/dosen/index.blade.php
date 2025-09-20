@@ -87,19 +87,14 @@
                                     <td>{{ optional($user->profile)->nik ?? '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-semibold">Nama Dosen Pembimbing</td>
+                                    <td class="fw-semibold">Nama</td>
                                     <td>:</td>
                                     <td>{{ optional($user->profile)->full_name ?? $user->email }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-semibold">Penempatan Magang</td>
+                                    <td class="fw-semibold">Asal Kampus</td>
                                     <td>:</td>
                                     <td>{{ optional($user->campus)->nama_campus ?? '-' }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">Dosen Pembimbing Magang</td>
-                                    <td>:</td>
-                                    <td>{{ optional($user->profile)->full_name ?? '-' }}</td>
                                 </tr>
                                 <tr>
                                     <td class="fw-semibold">Nomor WA</td>

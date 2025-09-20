@@ -65,6 +65,15 @@ class AuthController extends Controller
     }
 
     /**
+     * Show the authenticated lecturer's profile page.
+     */
+    public function lecturerProfile()
+    {
+        $user = Auth::user();
+        return view('dosen.profile', compact('user'));
+    }
+
+    /**
      * Update authenticated user's basic profile data (name, phone, email)
      */
     public function updateProfile(Request $request)
@@ -137,6 +146,43 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Profil mahasiswa berhasil diperbarui',
+            'data' => $user,
+        ]);
+    }
+
+    /**
+     * Update authenticated lecturer's profile data including NIK and Study Program
+     */
+    public function updateLecturerProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'full_name' => ['nullable','string','max:255'],
+            'nik' => ['nullable','string','max:100'],
+            'phone' => ['nullable','string','max:50'],
+            'email' => ['required','email','max:255','unique:users,email,' . $user->id . ',id'],
+        ]);
+
+        $profile = $user->profile()->firstOrCreate(['user_id' => $user->id]);
+        if (array_key_exists('full_name', $validated)) {
+            $profile->full_name = $validated['full_name'];
+        }
+        if (array_key_exists('nik', $validated)) {
+            $profile->nik = $validated['nik'];
+        }
+        if (array_key_exists('phone', $validated)) {
+            $profile->phone = $validated['phone'];
+        }
+        $profile->save();
+
+        $user->email = $validated['email'];
+        $user->save();
+
+        $user->load(['profile']);
+
+        return response()->json([
+            'message' => 'Profil dosen berhasil diperbarui',
             'data' => $user,
         ]);
     }

@@ -51,7 +51,7 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="{{ route('dosen.logbooks_approval.index') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                         <span class="menu-title">Logbooks</span>
                     </a>
@@ -60,7 +60,7 @@
 
                 <!--begin:Menu item-->
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="{{ route('dosen.profile') }}">
                         <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
                         <span class="menu-title">Profile</span>
                     </a>
