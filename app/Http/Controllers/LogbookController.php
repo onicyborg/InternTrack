@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use ZipArchive;
 
 class LogbookController extends Controller
 {
@@ -187,5 +188,41 @@ class LogbookController extends Controller
             'message' => 'Logbook berhasil ditambahkan',
             'data'    => $log->load('attachments'),
         ]);
+    }
+
+    /**
+     * Unduh semua lampiran logbook milik mahasiswa (pemilik data) sebagai ZIP
+     */
+    public function downloadZip(string $id)
+    {
+        $log = Logbooks::with(['attachments'])
+            ->where('user_id', auth()->id())
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $zipFileName = 'logbook_attachments_'.$log->id.'.zip';
+        $tmpPath = storage_path('app/tmp/'.$zipFileName);
+        if (!is_dir(dirname($tmpPath))) {
+            @mkdir(dirname($tmpPath), 0775, true);
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($tmpPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            abort(500, 'Gagal membuat arsip');
+        }
+
+        foreach ($log->attachments as $att) {
+            $url = $att->filename; // contoh: /storage/logbooks/attachments/xxx.pdf
+            $relative = str_starts_with($url, '/storage/') ? substr($url, 9) : ltrim(str_replace(Storage::url(''), '', $url), '/');
+            if ($relative) {
+                $full = storage_path('app/public/'.ltrim($relative, '/'));
+                if (is_file($full)) {
+                    $zip->addFile($full, basename($full));
+                }
+            }
+        }
+        $zip->close();
+
+        return response()->download($tmpPath, $zipFileName)->deleteFileAfterSend(true);
     }
 }

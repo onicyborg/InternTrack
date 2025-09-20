@@ -99,6 +99,7 @@ Route::prefix('mahasiswa')->middleware(['auth','role:mahasiswa'])->group(functio
     Route::get('/attendance', [AttendanceController::class, 'history'])->name('mahasiswa.attendance.index');
     Route::get('/attendance/data', [AttendanceController::class, 'historyData'])->name('mahasiswa.attendance.data');
     // Logbooks
+    Route::get('/logbooks/download-zip/{id}', [LogbookController::class, 'downloadZip'])->name('mahasiswa.logbooks.download_zip');
     Route::get('/logbooks', [LogbookController::class, 'index'])->name('mahasiswa.logbooks.index');
     Route::post('/logbooks', [LogbookController::class, 'store'])->name('mahasiswa.logbooks.store');
     Route::get('/logbooks/{id}', [LogbookController::class, 'show'])->name('mahasiswa.logbooks.show');
