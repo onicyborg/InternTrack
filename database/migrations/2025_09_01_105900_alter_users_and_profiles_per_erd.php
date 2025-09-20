@@ -9,6 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        $driver = DB::getDriverName();
         // Users table alterations per ERD
         Schema::table('users', function (Blueprint $table) {
             // Add is_active if not exists
@@ -24,18 +25,25 @@ return new class extends Migration
                 DB::table('users')->where('role', 'admin')->update(['role' => 'company_admin']);
             } catch (\Throwable $e) {}
 
-            // 2) For PostgreSQL: drop existing CHECK constraint then add new one
-            try {
-                // Ensure column is VARCHAR wide enough
-                DB::statement("ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(32)");
-            } catch (\Throwable $e) {}
+            if ($driver === 'pgsql') {
+                // 2) PostgreSQL: drop existing CHECK constraint then add new one
+                try {
+                    // Ensure column is VARCHAR wide enough
+                    DB::statement("ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(32)");
+                } catch (\Throwable $e) {}
 
-            // Drop known constraint name if exists
-            try { DB::statement('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check'); } catch (\Throwable $e) {}
-            // Add new CHECK constraint with desired set
-            try {
-                DB::statement("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('company_admin','pembina','mahasiswa','dosen'))");
-            } catch (\Throwable $e) {}
+                // Drop known constraint name if exists
+                try { DB::statement('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check'); } catch (\Throwable $e) {}
+                // Add new CHECK constraint with desired set
+                try {
+                    DB::statement("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('company_admin','pembina','mahasiswa','dosen'))");
+                } catch (\Throwable $e) {}
+            } else {
+                // 2) MySQL: gunakan ENUM agar konsisten dengan allowed set
+                try {
+                    DB::statement("ALTER TABLE `users` MODIFY `role` ENUM('company_admin','pembina','mahasiswa','dosen') NOT NULL");
+                } catch (\Throwable $e) {}
+            }
         }
 
         // Index suggestions
@@ -62,6 +70,7 @@ return new class extends Migration
 
     public function down(): void
     {
+        $driver = DB::getDriverName();
         // Re-add is_active to profiles if it didn't exist
         if (Schema::hasTable('profiles') && !Schema::hasColumn('profiles', 'is_active')) {
             Schema::table('profiles', function (Blueprint $table) {
@@ -77,11 +86,18 @@ return new class extends Migration
             try { $table->dropIndex('users_pembina_user_id_index'); } catch (\Throwable $e) {}
         });
 
-        // Attempt to revert role constraint (best-effort for PostgreSQL)
-        try { DB::statement('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check'); } catch (\Throwable $e) {}
-        try {
-            DB::statement("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('admin','dosen','pembina','mahasiswa'))");
-        } catch (\Throwable $e) {}
+        // Attempt to revert role constraint
+        if ($driver === 'pgsql') {
+            try { DB::statement('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check'); } catch (\Throwable $e) {}
+            try {
+                DB::statement("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('admin','dosen','pembina','mahasiswa'))");
+            } catch (\Throwable $e) {}
+        } else {
+            // MySQL: kembalikan ENUM agar juga mengizinkan 'admin'
+            try {
+                DB::statement("ALTER TABLE `users` MODIFY `role` ENUM('admin','dosen','pembina','mahasiswa') NOT NULL");
+            } catch (\Throwable $e) {}
+        }
 
         // Drop is_active in users
         if (Schema::hasColumn('users', 'is_active')) {
