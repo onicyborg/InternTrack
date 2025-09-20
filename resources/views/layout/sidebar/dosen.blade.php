@@ -1,8 +1,8 @@
 <!--begin::Logo-->
-<div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
+<div class="app-sidebar-logo" id="kt_app_sidebar_logo">
     <a href="/">
-        <img alt="Logo" src="{{ asset('assets/media/logos/default-dark.svg') }}" class="h-25px app-sidebar-logo-default" />
-        <img alt="Logo" src="{{ asset('assets/media/logos/default-small.svg') }}" class="h-20px app-sidebar-logo-minimize" />
+        <img alt="Logo" src="{{ asset('assets/media/logos/InternTrack-Default.png') }}" class="h-150px app-sidebar-logo-default" />
+        <img alt="Logo" src="{{ asset('assets/media/logos/InternTrack-Small.png') }}" class="h-50px app-sidebar-logo-minimize" />
     </a>
     <!--begin::Sidebar toggle-->
     <div id="kt_app_sidebar_toggle" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">
@@ -34,7 +34,7 @@
                 <!--begin:Menu item-->
                 <div class="menu-item">
                     <a class="menu-link" href="/">
-                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                        <span class="menu-icon"><i class="bi bi-speedometer2"></i></span>
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </div>
@@ -43,7 +43,7 @@
                 <!--begin:Menu item-->
                 <div class="menu-item">
                     <a class="menu-link" href="{{ route('dosen.attendance.index') }}">
-                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                        <span class="menu-icon"><i class="bi bi-calendar-check"></i></span>
                         <span class="menu-title">Attendance</span>
                     </a>
                 </div>
@@ -52,7 +52,7 @@
                 <!--begin:Menu item-->
                 <div class="menu-item">
                     <a class="menu-link" href="{{ route('dosen.logbooks_approval.index') }}">
-                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                        <span class="menu-icon"><i class="bi bi-journal-text"></i></span>
                         <span class="menu-title">Logbooks</span>
                     </a>
                 </div>
@@ -61,7 +61,7 @@
                 <!--begin:Menu item-->
                 <div class="menu-item">
                     <a class="menu-link" href="{{ route('dosen.profile') }}">
-                        <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                        <span class="menu-icon"><i class="bi bi-person"></i></span>
                         <span class="menu-title">Profile</span>
                     </a>
                 </div>
@@ -72,7 +72,7 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <a class="menu-link" href="#" onclick="event.preventDefault(); this.closest('form').submit();">
-                            <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                            <span class="menu-icon"><i class="bi bi-box-arrow-right"></i></span>
                             <span class="menu-title">Logout</span>
                         </a>
                     </form>
