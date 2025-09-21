@@ -1,3 +1,122 @@
+# InternTrack
+
+Sistem manajemen magang yang membantu institusi/komunitas memantau aktivitas peserta magang secara terpadu: akun multi-peran, presensi, logbook harian, lampiran berkas, serta alur persetujuan oleh dosen/pembina.
+
+---
+
+## Tentang Project
+
+InternTrack dibangun di atas Laravel untuk menyediakan platform pencatatan dan monitoring kegiatan magang. Proyek ini berfokus pada:
+
+- Manajemen pengguna dengan peran berbeda (company_admin, dosen, pembina, mahasiswa).
+- Pencatatan presensi (check-in/checkout) dengan bukti foto dan tanda tangan.
+- Logbook kegiatan dengan lampiran file serta proses persetujuan berlapis.
+- Relasi ke entitas kampus untuk mengelola konteks institusi.
+
+## Fitur Utama
+
+- Autentikasi pengguna dan manajemen sesi.
+- Role-based access control: company_admin, dosen, pembina, mahasiswa.
+- Profil pengguna (biodata dasar, NIM/NIK, program studi, periode magang).
+- Presensi harian: check-in, check-out, status hadir/izin/sakit/alpa, bukti foto & ttd, approval dosen & pembina.
+- Logbook aktivitas: subjek, deskripsi, rentang tanggal, persetujuan dosen & pembina, catatan/revisi, lampiran berkas.
+- Relasi ke Kampus (campuses) untuk pengelolaan dan pelaporan lintas institusi.
+
+## Teknologi yang Digunakan
+
+- Laravel (PHP) sebagai backend framework.
+- Blade sebagai templating engine.
+- Eloquent ORM untuk akses database.
+- Vite untuk asset bundling (JS/CSS).
+- Database: kompatibel MySQL/MariaDB atau PostgreSQL.
+
+## Prasyarat (Prerequisite)
+
+- PHP 8.1 atau lebih baru.
+- Composer.
+- Node.js 18+ dan npm.
+- Server database (MySQL/MariaDB atau PostgreSQL).
+- Git.
+
+## Langkah Instalasi (Dari Clone Repo)
+
+1. Clone repository
+   ```bash
+   git clone <repo-url>
+   cd InternTrack
+   ```
+2. Salin file environment dan sesuaikan konfigurasi
+   ```bash
+   cp .env.example .env
+   # Edit .env -> sesuaikan DB_* (DB_DATABASE, DB_USERNAME, DB_PASSWORD), APP_URL, dll.
+   ```
+3. Install dependensi PHP dan JS
+   ```bash
+   composer install
+   npm install
+   ```
+4. Generate application key
+   ```bash
+   php artisan key:generate
+   ```
+5. Jalankan migrasi database
+   ```bash
+   php artisan migrate
+   ```
+6. (Opsional) Buat symbolic link storage
+   ```bash
+   php artisan storage:link
+   ```
+7. Build aset frontend (pilih salah satu)
+   ```bash
+   npm run dev    # untuk pengembangan
+   npm run build  # untuk produksi
+   ```
+8. Jalankan server lokal
+   ```bash
+   php artisan serve
+   ```
+
+## Dokumentasi Struktur Database
+
+Daftar tabel inti yang digunakan sistem:
+
+- users
+- profiles
+- campuses
+- attendances
+- logbooks
+- logbook_attachments
+
+Gambar ERD tersedia pada file berikut:
+
+- Pratinjau: `InternTrack.png`
+- Link download: [./InternTrack.png](./InternTrack.png)
+
+Anda juga dapat mengimpor skema DBML pada `database/schema.dbml` ke [dbdiagram.io](https://dbdiagram.io/) untuk melihat ERD interaktif.
+
+## Kontribusi
+
+Kontribusi sangat dihargai! Prosedur umum:
+
+1. Fork repository ini.
+2. Buat branch fitur/bugfix: `git checkout -b feat/nama-fitur` atau `fix/nama-bug`.
+3. Lakukan perubahan sesuai standar kode (PSR-12) dan tambahkan test bila relevan.
+4. Commit dengan pesan yang jelas: `git commit -m "feat: deskripsi singkat"`.
+5. Push ke fork Anda dan buat Pull Request ke branch utama.
+
+## Kontak
+
+Silakan lengkapi detail kontak di bawah ini agar pengguna lain mudah terhubung:
+
+- Nama: [Isikan Nama Anda]
+- Email: [email@contoh.com]
+- Website/Portfolio: [https://contoh.com]
+- LinkedIn/GitHub: [tautan-profil]
+
+---
+
+<!-- Template README Laravel di bawah ini dibiarkan untuk referensi; beri tahu saya jika ingin dihapus. -->
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

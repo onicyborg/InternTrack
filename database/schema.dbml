@@ -1,0 +1,130 @@
+// InternTrack - DBML schema generated from final Laravel migrations
+// Import this file into https://dbdiagram.io/
+
+//// Enums
+Enum user_role {
+  company_admin
+  pembina
+  mahasiswa
+  dosen
+}
+
+Enum approval_state {
+  pending
+  approve
+  reject
+}
+
+Enum attendance_status {
+  hadir
+  izin
+  sakit
+  alpa
+}
+
+//// Tables
+Table users {
+  id uuid [pk]
+  role user_role
+  email varchar(191) [not null, unique]
+  password varchar(255) [not null]
+  remember_token varchar(100)
+  is_active boolean
+  dosen_user_id uuid
+  pembina_user_id uuid
+  campus_id uuid
+  created_at timestamptz
+  updated_at timestamptz
+
+  indexes {
+    (role) [name: "users_role_index"]
+    (campus_id) [name: "users_campus_id_index"]
+    (dosen_user_id) [name: "users_dosen_user_id_index"]
+    (pembina_user_id) [name: "users_pembina_user_id_index"]
+  }
+}
+
+Table profiles {
+  id uuid [pk]
+  user_id uuid [not null, unique]
+  full_name varchar(191)
+  photo_url text
+  phone varchar(50)
+  whatsapp varchar(50)
+  nik varchar(100)
+  nim varchar(100)
+  program_studi varchar(150)
+  start_magang date
+  end_magang date
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table campuses {
+  id uuid [pk]
+  nama_campus varchar(191)
+  contact_person varchar(191)
+  email_campus varchar(191)
+  alamat_campus text
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table attendances {
+  id uuid [pk]
+  user_id uuid [not null]
+  checkin_at timestamptz
+  checkout_at timestamptz
+  photo_checkin_url text
+  photo_checkout_url text
+  ttd_checkin_url text
+  ttd_checkout_url text
+  is_approve_dosen boolean [not null, default: false]
+  is_approve_pembina boolean [not null, default: false]
+  status attendance_status [not null, default: 'hadir']
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table logbooks {
+  id uuid [pk]
+  user_id uuid [not null]
+  subject varchar(191) [not null]
+  description text
+  start_date date
+  end_date date
+  approval_dosen approval_state [not null, default: 'pending']
+  approval_pembina approval_state [not null, default: 'pending']
+  remark_dosen text
+  remark_pembina text
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table logbook_attachments {
+  id uuid [pk]
+  logbook_id uuid [not null]
+  filename varchar(255) [not null]
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+//// Relationships
+// users self references
+Ref: users.dosen_user_id > users.id [delete: set null]
+Ref: users.pembina_user_id > users.id [delete: set null]
+
+// users to campuses
+Ref: users.campus_id > campuses.id [delete: set null]
+
+// profiles one-to-one to users
+Ref: profiles.user_id > users.id [delete: cascade]
+
+// attendances to users
+Ref: attendances.user_id > users.id [delete: cascade]
+
+// logbooks to users
+Ref: logbooks.user_id > users.id [delete: cascade]
+
+// attachments to logbooks
+Ref: logbook_attachments.logbook_id > logbooks.id [delete: cascade]
