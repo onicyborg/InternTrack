@@ -156,9 +156,9 @@ Kontribusi sangat terbuka. Langkah umum:
 
 Jika ada pertanyaan atau saran, silakan hubungi:
 
-* **Nama:** \Akhmad Fauzi
-* **Email:** \[akhmadfauzy40@gmail.com]
-* **GitHub/LinkedIn:** \[https://github.com/onicyborg]
+* **Nama:** Akhmad Fauzi
+* **Email:** [akhmadfauzy40@gmail.com](mailto:akhmadfauzy40@gmail.com)
+* **GitHub/LinkedIn:** [https://github.com/onicyborg](https://github.com/onicyborg)
 
 ---
 
